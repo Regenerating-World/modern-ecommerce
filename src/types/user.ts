@@ -1,4 +1,5 @@
 import { UserEvents } from "@/lib/client/event-types";
+import { UserTag, QuestionnaireAnswer, Address } from "./ecommerce";
 
 // Tipos para dados do usuário do Clerk
 export interface ClerkUserData {
@@ -47,13 +48,20 @@ export interface ContentfulUserEntry {
   };
 }
 
-// Tipo para resposta da API de sincronização
-export interface SyncUserResponse {
-  message: string;
-  user?: ContentfulUserEntry;
-  error?: string;
+// Enhanced user data with tags and personalization
+export interface EnhancedUserData {
+  tags: UserTag[];
+  questionnaireAnswers: QuestionnaireAnswer[];
+  addresses: Address[];
+  cashbackBalance: number;
+  totalOrders: number;
+  totalSpent: number;
+  preferredPaymentMethod?: string;
+  marketingConsent: boolean;
+  lastActiveAt: string;
 }
 
+// Updated UserData interface
 export interface UserData {
   id: string;
   nome: string;
@@ -61,4 +69,42 @@ export interface UserData {
   telefone?: string;
   userObject: Record<string, unknown>;
   userEvents?: UserEvents;
+  enhancedData?: EnhancedUserData;
 }
+
+// Tipo para resposta da API de sincronização
+export interface SyncUserResponse {
+  message: string;
+  user?: ContentfulUserEntry;
+  error?: string;
+}
+
+// Session data for anonymous users
+export interface AnonymousSession {
+  sessionId: string;
+  tags: UserTag[];
+  cartId?: string;
+  events: UserEvents;
+  createdAt: string;
+  lastActiveAt: string;
+  utmParams?: {
+    source?: string;
+    medium?: string;
+    campaign?: string;
+    term?: string;
+    content?: string;
+  };
+  deviceInfo?: {
+    userAgent: string;
+    platform: string;
+    isMobile: boolean;
+    screenSize: string;
+  };
+  locationInfo?: {
+    country?: string;
+    city?: string;
+    timezone?: string;
+  };
+}
+
+
